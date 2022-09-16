@@ -35,9 +35,11 @@ namespace AuthApplication.Identity.API.Configurations
 
             service.AddCors(options =>
             {
+
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>());
+                    policy.WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>()).AllowAnyMethod().AllowAnyHeader();
+
                 });
             });
 
@@ -53,8 +55,8 @@ namespace AuthApplication.Identity.API.Configurations
             app.UseSerilog(configuration);
             app.UseHttpsRedirection();
 
-            app.UseCors();
-        
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
 
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
