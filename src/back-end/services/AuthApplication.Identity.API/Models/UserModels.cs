@@ -16,15 +16,16 @@ namespace AuthApplication.Identity.API.NovaPasta
         [StringLength(100, ErrorMessage = "This field {0} should be between {2} and {1} characters", MinimumLength = 0)]
         public string Password { get; set; }
     }
+    
 
     public class UserRegister
     {
 
         [Required(ErrorMessage = "This field {0} is required")]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
 
         [Required(ErrorMessage = "This field {0} is required")]
-        public string Document { get; set; }
+        public string LastName { get; set; }
 
 
         [Required(ErrorMessage = "This field {0} is required")]
