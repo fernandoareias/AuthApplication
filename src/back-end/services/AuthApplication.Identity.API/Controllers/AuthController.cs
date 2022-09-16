@@ -20,7 +20,6 @@ namespace AuthApplication.Identity.API.Controllers
     [Route("api/account")]
     public class AuthController : MainController
     {
-
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
@@ -39,27 +38,7 @@ namespace AuthApplication.Identity.API.Controllers
             _log = log;
         }
 
-        [HttpPost("logout")]
-        public async Task<IActionResult> LogOut()
-        {
-            try
-            {
-                await _signInManager.SignOutAsync();
-                _log.LogInformation("User logged out.");
-
-                return Ok("User logged out.");
-            }
-            catch (Exception ex)
-            {
-                _log.LogError(ex.Message);
-                throw ex;
-            }
-        }
-
-
-
-        [HttpPost("register")]
-        [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
+        [HttpPost("signup")]
         public async Task<IActionResult> Registrar(UserRegister usuarioRegistro)
         {
             try
@@ -95,13 +74,10 @@ namespace AuthApplication.Identity.API.Controllers
 
 
         [HttpPost("login")]
-        //[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, NoStore = false)]
-        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> Login(UserLogin usuarioLogin)
         {
             try
             {
-
 
                 if (!ModelState.IsValid)
                     return CustomResponse(ModelState);
@@ -118,7 +94,7 @@ namespace AuthApplication.Identity.API.Controllers
                     return CustomResponse();
                 }
 
-                AdicionarErroProcessamento("Usuário ou senha incorretos.");
+                AdicionarErroProcessamento("User or password incorrect!");
                 return CustomResponse();
             }
             catch (Exception ex)
@@ -128,7 +104,7 @@ namespace AuthApplication.Identity.API.Controllers
             }
         }
 
-        
+        #region Geração do JWT
 
         private async Task<UserLoginView> GerarJwt(string email)
         {
@@ -197,5 +173,7 @@ namespace AuthApplication.Identity.API.Controllers
 
         private static long ToUnixExpochDate(DateTime date)
             => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(year: 1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
+
+        #endregion
     }
 }
